@@ -85,7 +85,9 @@ chef environment.</p>
 <h2>
 <a id="client-setup" class="anchor" href="#client-setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Client Setup</h2>
 
-<p>To setup nrpe client, add recipe <code>icinga2::client</code>.</p>
+<p>Currently this cookbook only supports NRPE Client. Icinga2 agent support will be added soon.</p>
+
+<p>To setup nrpe client, add recipe <code>icinga2::client_nrpe</code>.</p>
 
 <p>Use <code>icinga2_nrpe</code> LWRP to create nrpe plugins commands.</p>
 
@@ -106,9 +108,9 @@ chef environment.</p>
 <li><p><code>icinga2::server</code>         - manages Icinga2 server setup, wrapper recipe for other server recipes</p></li>
 <li><p><code>icinga2::server_apache</code>      - manages apache and icinga2 vhost using <code>apache2</code> cookbook</p></li>
 <li><p><code>icinga2::server_install</code>         - install icinga2 core/web/classic ui server packages</p></li>
-<li><p><code>icinga2::server_core</code>            - configures icinga2 core directories and files</p></li>
+<li><p><code>icinga2::server_core</code>            - configures icinga2 core</p></li>
 <li><p><code>icinga2::server_classic_ui</code>          - configures icinga2 classic ui</p></li>
-<li><p><code>icinga2::server_features</code>        - manages Icinga2 client NRPE Setup, wrapper recipe for other client recipes</p></li>
+<li><p><code>icinga2::server_features</code>        - enable/disable Icinga2 features</p></li>
 <li><p><code>icinga2::server_objects</code>         - manages icinga2 default objects/templates objects if <code>node['icinga2']['disable_default_conf']</code> is set</p></li>
 <li><p><code>icinga2::server_object_host</code>     - creates icinga2 default Host objects / tempaltes</p></li>
 <li><p><code>icinga2::server_object_notificationcommand</code>   - creates icinga2 default NotificationCommand objects</p></li>
@@ -117,7 +119,7 @@ chef environment.</p>
 <li><p><code>icinga2::server_object_timeperiod</code>       - creates icinga2 default TimePeriod objects / templates</p></li>
 <li><p><code>icinga2::server_object_user</code>             - creates icinga2 default User objects / templates</p></li>
 <li><p><code>icinga2::server_object_usergroup</code>    - creates icinga2 default UserGroup objects</p></li>
-<li><p><code>icinga2::client</code>         - install and configures nrpe client</p></li>
+<li><p><code>icinga2::client_nrpe</code>        - install and configures nrpe client</p></li>
 </ul>
 
 <h2>
