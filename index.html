@@ -254,6 +254,8 @@ automation around Chef environment.</p>
 <li>icinga2_graphitewriter</li>
 <li>icinga2_host</li>
 <li>icinga2_hostgroup</li>
+<li>icinga2_idomysqlconnection</li>
+<li>icinga2_idopgsqlconnection</li>
 <li>icinga2_notification</li>
 <li>icinga2_notificationcommand</li>
 <li>icinga2_scheduleddowntime</li>
@@ -416,6 +418,29 @@ end
 <p>LWRP <code>envhostgroup</code> creates an icinga <code>Hostgroup</code> object for LWRP <code>environment</code> host groups.</p>
 
 <p>An <code>environment</code> host groups are evaluated at compile time, hence it conflicts with LWRP <code>hostgroup</code> resources. To avoid the conflict, LWRP <code>envhostgroup</code> resources are created in a separate object file for an environemnt.</p>
+
+<p><strong>LWRP Environment HostGroup example</strong></p>
+
+<pre><code>icinga2_envhostgroup 'envhostgroup' do
+  environment environment_name
+  groups %w(group)
+end
+</code></pre>
+
+<p>Above LWRP resource will create <code>HostGroup</code> for a chef environment.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>environment</em> (name_attribute)    - chef environment name</li>
+<li>
+<em>groups</em> (optional)   - host group names</li>
+</ul>
+
+<p>Note: This LWRP resoruce is only meant for LWRP <code>environment</code> and not to be used for custom resources.</p>
 
 <h2>
 <a id="lwrp-icinga2_host" class="anchor" href="#lwrp-icinga2_host" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_host</h2>
@@ -845,14 +870,14 @@ end
 
 <p><strong>LWRP Feature enable example</strong></p>
 
-<pre><code>icinga2_applyservice 'feature'
+<pre><code>icinga2_feature 'feature'
 </code></pre>
 
 <p>Above LWRP resource will enable an icinga <code>Feature</code>.</p>
 
 <p><strong>LWRP Feature disable example</strong></p>
 
-<pre><code>icinga2_applyservice 'feature' do
+<pre><code>icinga2_feature 'feature' do
   action :disable
 end
 </code></pre>
@@ -942,45 +967,549 @@ end
 <h2>
 <a id="lwrp-icinga2_usergroup" class="anchor" href="#lwrp-icinga2_usergroup" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_usergroup</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>usergroup</code> creates an icinga <code>UserGroup</code> object.</p>
+
+<p><strong>LWRP UserGroup example</strong></p>
+
+<pre><code>icinga2_usergroup 'usergroup_name' do
+  disaply_name 'User Group'
+  groups ['usergroup']
+  zone 'zone_name'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>UserGroup</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>display_name</em> (optional) - icinga <code>UserGroup</code> attribute <code>display_name</code>
+</li>
+<li>
+<em>groups</em> (optional)   - icinga <code>UserGroup</code> attribute <code>groups</code>
+</li>
+<li>
+<em>zone</em> (optional) - icinga <code>UserGroup</code> attribute <code>zone</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_zone" class="anchor" href="#lwrp-icinga2_zone" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_zone</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>zone</code> creates an icinga <code>Zone</code> object.</p>
 
-<h2>
-<a id="lwrp-icinga2_applydependency" class="anchor" href="#lwrp-icinga2_applydependency" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applydependency</h2>
+<p><strong>LWRP Zone example</strong></p>
 
-<p>To be added.</p>
+<pre><code>icinga2_zone 'zone' do
+  endpoints %w(endpoint)
+  parent 'parent endpoint'
+end
+</code></pre>
 
-<h2>
-<a id="lwrp-icinga2_applynotification" class="anchor" href="#lwrp-icinga2_applynotification" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applynotification</h2>
+<p>Above LWRP resource will create an icinga <code>Zone</code> object.</p>
 
-<p>To be added.</p>
+<p><strong>LWRP Options</strong></p>
 
-<h2>
-<a id="lwrp-icinga2_checkcommand" class="anchor" href="#lwrp-icinga2_checkcommand" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_checkcommand</h2>
-
-<p>To be added.</p>
-
-<h2>
-<a id="lwrp-icinga2_downtime" class="anchor" href="#lwrp-icinga2_downtime" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_downtime</h2>
-
-<p>To be added.</p>
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>endpoints</em> (optional)    - icinga <code>Zone</code> attribute <code>endpoints</code>
+</li>
+<li>
+<em>parent</em> (optional)   - icinga <code>Zone</code> attribute <code>parent</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_endpoint" class="anchor" href="#lwrp-icinga2_endpoint" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_endpoint</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>endpoint</code> creates an icinga <code>Endpoint</code> object.</p>
+
+<p><strong>LWRP Endpoint example</strong></p>
+
+<pre><code>icinga2_endpoint 'endpoint' do
+  host 'host address'
+  port 'port'
+  log_duration 'log duration'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>Endpoint</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>host</em> (optional) - icinga <code>Endpoint</code> attribute <code>host</code>
+</li>
+<li>
+<em>port</em> (optional) - icinga <code>Endpoint</code> attribute <code>port</code>
+</li>
+<li>
+<em>log_duration</em> (optional) - icinga <code>Endpoint</code> attribute <code>log_duration</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_timeperiod" class="anchor" href="#lwrp-icinga2_timeperiod" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_timeperiod</h2>
+
+<p>LWRP <code>timeperiod</code> creates an icinga <code>TimePeriod</code> object.</p>
+
+<p><strong>LWRP TimePeriod example</strong></p>
+
+<pre><code>icinga2_timeperiod '24x7' do
+  import 'legacy-timeperiod'
+  display_name 'Icinga 2 24x7 TimePeriod'
+  ranges 'monday' =&gt; '00:00-24:00',
+    'tuesday' =&gt; '00:00-24:00',
+    'wednesday' =&gt; '00:00-24:00',
+    'thursday' =&gt; '00:00-24:00',
+    'friday' =&gt; '00:00-24:00',
+    'saturday' =&gt; '00:00-24:00',
+    'sunday' =&gt; '00:00-24:00'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>TimePeriod</code> object.</p>
+
+<p><strong>LWRP TimePeriod template</strong></p>
+
+<pre><code>icinga2_timeperiod 'legacy-timeperiod' do
+  template true
+  display_name 'legacy-timeperiod'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>TimePeriod</code> template.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>display_name</em> (optional) - icinga <code>TimePeriod</code> attribute <code>display_name</code>
+</li>
+<li>
+<em>import</em> (optional)   - icinga <code>TimePeriod</code> attribute <code>import</code>
+</li>
+<li>
+<em>zone</em> (optional) - icinga <code>TimePeriod</code> attribute <code>zone</code>
+</li>
+<li>
+<em>ranges</em> (optional)   - icinga <code>TimePeriod</code> attribute <code>ranges</code>
+</li>
+<li>
+<em>template</em> (optional) - whether to create an icinga <code>TimePeriod</code> template</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_eventcommand" class="anchor" href="#lwrp-icinga2_eventcommand" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_eventcommand</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>eventcommand</code> creates an icinga <code>EventCommand</code> object.</p>
+
+<p><strong>LWRP EventCommand example</strong></p>
+
+<pre><code>icinga2_eventcommand 'eventcommand' do
+  command 'command name'
+  custom_vars :attribute =&gt; 'value'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>EventCommand</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>import</em> (optional)   - icinga <code>EventCommand</code> attribute <code>import</code>
+</li>
+<li>
+<em>command</em> (optional)  - icinga <code>EventCommand</code> attribute <code>command</code>
+</li>
+<li>
+<em>env</em> (optional)  - icinga <code>EventCommand</code> attribute <code>env</code>
+</li>
+<li>
+<em>timeout</em> (optional)  - icinga <code>EventCommand</code> attribute <code>timeout</code>
+</li>
+<li>
+<em>arguments</em> (optional)    - icinga <code>EventCommand</code> attribute <code>arguments</code>
+</li>
+<li>
+<em>custom_vars</em> (optional)  - icinga <code>EventCommand</code> attribute <code>custom_vars</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_checkcommand" class="anchor" href="#lwrp-icinga2_checkcommand" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_checkcommand</h2>
+
+<p>LWRP <code>checkcommand</code> creates an icinga <code>CheckCommand</code> object.</p>
+
+<p><strong>LWRP CheckCommand example</strong></p>
+
+<pre><code>icinga2_checkcommand 'eventcommand' do
+  command 'command name'
+  env :attribute =&gt; 'value'
+  arguments :attribute =&gt; 'value'
+  custom_vars :attribute =&gt; 'value'
+  zone 'zone name'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>CheckCommand</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>import</em> (optional)   - icinga <code>CheckCommand</code> attribute <code>import</code>
+</li>
+<li>
+<em>command</em> (optional)  - icinga <code>CheckCommand</code> attribute <code>command</code>
+</li>
+<li>
+<em>env</em> (optional)  - icinga <code>CheckCommand</code> attribute <code>env</code>
+</li>
+<li>
+<em>timeout</em> (optional)  - icinga <code>CheckCommand</code> attribute <code>timeout</code>
+</li>
+<li>
+<em>zone</em> (optional) - icinga <code>CheckCommand</code> attribute <code>zone</code>
+</li>
+<li>
+<em>arguments</em> (optional)    - icinga <code>CheckCommand</code> attribute <code>arguments</code>
+</li>
+<li>
+<em>custom_vars</em> (optional)  - icinga <code>CheckCommand</code> attribute <code>custom_vars</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_scheduleddowntime" class="anchor" href="#lwrp-icinga2_scheduleddowntime" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_scheduleddowntime</h2>
+
+<p>LWRP <code>scheduleddowntime</code> creates an icinga <code>ScheduledDowntime</code> object.</p>
+
+<p><strong>LWRP ScheduledDowntime example</strong></p>
+
+<pre><code>icinga2_scheduleddowntime 'downtime' do
+  host_name 'host name'
+  service_name 'service name'
+  author 'author'
+  comment 'comment'
+  duration 'duration'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>ScheduledDowntime</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>host_name</em> (optional)    - icinga <code>ScheduledDowntime</code> attribute <code>host_name</code>
+</li>
+<li>
+<em>service_name</em> (optional) - icinga <code>ScheduledDowntime</code> attribute <code>service_name</code>
+</li>
+<li>
+<em>author</em> (optional)   - icinga <code>ScheduledDowntime</code> attribute <code>author</code>
+</li>
+<li>
+<em>comment</em> (optional)  - icinga <code>ScheduledDowntime</code> attribute <code>comment</code>
+</li>
+<li>
+<em>fixed</em> (optional)    - icinga <code>ScheduledDowntime</code> attribute <code>fixed</code>
+</li>
+<li>
+<em>duration</em> (optional) - icinga <code>ScheduledDowntime</code> attribute <code>duration</code>
+</li>
+<li>
+<em>zone</em> (optional) - icinga <code>ScheduledDowntime</code> attribute <code>zone</code>
+</li>
+<li>
+<em>ranges</em> (optional)   - icinga <code>ScheduledDowntime</code> attribute <code>ranges</code>
+</li>
+<li>
+<em>template</em> (optional) - whether to create an icinga <code>ScheduledDowntime</code> template</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_externalcommandlistener" class="anchor" href="#lwrp-icinga2_externalcommandlistener" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_externalcommandlistener</h2>
+
+<p>LWRP <code>externalcommandlistener</code> creates an icinga <code>ExternalCommandListener</code> object.</p>
+
+<p><strong>LWRP ExternalCommandListener example</strong></p>
+
+<pre><code>icinga2_externalcommandlistener 'externalcommandlistener' do
+  library 'library'
+  command_path 'command path'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>ExternalCommandListener</code> config object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default 'compat', icinga <code>ExternalCommandListener</code> attribute <code>library</code>
+</li>
+<li>
+<em>command_path</em> (optional) - icinga <code>ExternalCommandListener</code> attribute <code>command_path</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_gelfwriter" class="anchor" href="#lwrp-icinga2_gelfwriter" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_gelfwriter</h2>
+
+<p>LWRP <code>gelfwriter</code> creates an icinga <code>GelfWriter</code> object.</p>
+
+<p><strong>LWRP GelfWrite example</strong></p>
+
+<pre><code>icinga2_gelfwriter 'gelfwriter' do
+  library 'library'
+  host 'host address'
+  port 'port'
+  source 'source'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>GelfWriter</code> config object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default 'perfdata', icinga <code>GelfWriter</code> attribute <code>library</code>
+</li>
+<li>
+<em>host</em> (optional) - icinga <code>GelfWriter</code> attribute <code>host</code>
+</li>
+<li>
+<em>port</em> (optional) - icinga <code>GelfWriter</code> attribute <code>port</code>
+</li>
+<li>
+<em>source</em> (optional)   - icinga <code>GelfWriter</code> attribute <code>source</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_graphitewriter" class="anchor" href="#lwrp-icinga2_graphitewriter" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_graphitewriter</h2>
+
+<p>LWRP <code>graphitewriter</code> creates an icinga <code>GraphiteWriter</code> object.</p>
+
+<p><strong>LWRP GraphiteWriter example</strong></p>
+
+<pre><code>icinga2_graphitewriter 'graphitewriter' do
+  library 'library'
+  host 'host address'
+  port 'port'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>GraphiteWriter</code> config object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default 'perfdata', icinga <code>GraphiteWriter</code> attribute <code>library</code>
+</li>
+<li>
+<em>host</em> (optional) - icinga <code>GraphiteWriter</code> attribute <code>host</code>
+</li>
+<li>
+<em>port</em> (optional) - icinga <code>GraphiteWriter</code> attribute <code>port</code>
+</li>
+<li>
+<em>host_name_template</em> (optional)   - icinga <code>GraphiteWriter</code> attribute <code>host_name_template</code>
+</li>
+<li>
+<em>service_name_template</em> (optional)    - icinga <code>GraphiteWriter</code> attribute <code>service_name_template</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_idomysqlconnection" class="anchor" href="#lwrp-icinga2_idomysqlconnection" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_idomysqlconnection</h2>
+
+<p>LWRP <code>idomysqlconnection</code> creates an icinga <code>IdoMySqlConnection</code> object.</p>
+
+<p><strong>LWRP IdoMySqlConnection example</strong></p>
+
+<pre><code>icinga2_idomysqlconnection 'idomysqlconnection' do
+  library 'library'
+  host 'host address'
+  port 'port'
+  user 'user name'
+  password 'password'
+  database 'database name'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>IdoMySqlConnection</code> config object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default 'db_ido_mysql', icinga <code>IdoMySqlConnection</code> attribute <code>library</code>
+</li>
+<li>
+<em>host</em> (optional) - icinga <code>IdoMySqlConnection</code> attribute <code>host</code>
+</li>
+<li>
+<em>port</em> (optional) - icinga <code>IdoMySqlConnection</code> attribute <code>port</code>
+</li>
+<li>
+<em>user</em> (optional) - icinga <code>IdoMySqlConnection</code> attribute <code>user</code>
+</li>
+<li>
+<em>password</em> (optional) - icinga <code>IdoMySqlConnection</code> attribute <code>password</code>
+</li>
+<li>
+<em>database</em> (optional) - icinga <code>IdoMySqlConnection</code> attribute <code>database</code>
+</li>
+<li>
+<em>table_prefix</em> (optional) - icinga <code>IdoMySqlConnection</code> attribute <code>table_prefix</code>
+</li>
+<li>
+<em>instance_name</em> (optional)    - icinga <code>IdoMySqlConnection</code> attribute <code>instance_name</code>
+</li>
+<li>
+<em>instance_description</em> (optional) - icinga <code>IdoMySqlConnection</code> attribute <code>instance_description</code>
+</li>
+<li>
+<em>enable_ha</em> (optional)    - icinga <code>IdoMySqlConnection</code> attribute <code>enable_ha</code>
+</li>
+<li>
+<em>failover_timeout</em> (optional) - icinga <code>IdoMySqlConnection</code> attribute <code>failover_timeout</code>
+</li>
+<li>
+<em>enable_ha</em> (optional)    - icinga <code>IdoMySqlConnection</code> attribute <code>enable_ha</code>
+</li>
+<li>
+<em>cleanup</em> (optional)  - icinga <code>IdoMySqlConnection</code> attribute <code>cleanup</code>
+</li>
+<li>
+<em>categories</em> (optional)   - icinga <code>IdoMySqlConnection</code> attribute <code>categories</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_idopgsqlconnection" class="anchor" href="#lwrp-icinga2_idopgsqlconnection" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_idopgsqlconnection</h2>
+
+<p>LWRP <code>idopgsqlconnection</code> creates an icinga <code>IdoPgSqlConnection</code> object.</p>
+
+<p><strong>LWRP IdoPgSqlConnection example</strong></p>
+
+<pre><code>icinga2_idopgsqlconnection 'idopgsqlconnection' do
+  library 'library'
+  host 'host address'
+  port 'port'
+  user 'user name'
+  password 'password'
+  database 'database name'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>IdoPgSqlConnection</code> config object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default 'db_ido_mysql', icinga <code>IdoPgSqlConnection</code> attribute <code>library</code>
+</li>
+<li>
+<em>host</em> (optional) - icinga <code>IdoPgSqlConnection</code> attribute <code>host</code>
+</li>
+<li>
+<em>port</em> (optional) - icinga <code>IdoPgSqlConnection</code> attribute <code>port</code>
+</li>
+<li>
+<em>user</em> (optional) - icinga <code>IdoPgSqlConnection</code> attribute <code>user</code>
+</li>
+<li>
+<em>password</em> (optional) - icinga <code>IdoPgSqlConnection</code> attribute <code>password</code>
+</li>
+<li>
+<em>database</em> (optional) - icinga <code>IdoPgSqlConnection</code> attribute <code>database</code>
+</li>
+<li>
+<em>table_prefix</em> (optional) - icinga <code>IdoPgSqlConnection</code> attribute <code>table_prefix</code>
+</li>
+<li>
+<em>instance_name</em> (optional)    - icinga <code>IdoPgSqlConnection</code> attribute <code>instance_name</code>
+</li>
+<li>
+<em>instance_description</em> (optional) - icinga <code>IdoPgSqlConnection</code> attribute <code>instance_description</code>
+</li>
+<li>
+<em>enable_ha</em> (optional)    - icinga <code>IdoPgSqlConnection</code> attribute <code>enable_ha</code>
+</li>
+<li>
+<em>failover_timeout</em> (optional) - icinga <code>IdoPgSqlConnection</code> attribute <code>failover_timeout</code>
+</li>
+<li>
+<em>enable_ha</em> (optional)    - icinga <code>IdoPgSqlConnection</code> attribute <code>enable_ha</code>
+</li>
+<li>
+<em>cleanup</em> (optional)  - icinga <code>IdoPgSqlConnection</code> attribute <code>cleanup</code>
+</li>
+<li>
+<em>categories</em> (optional)   - icinga <code>IdoPgSqlConnection</code> attribute <code>categories</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_sysloglogger" class="anchor" href="#lwrp-icinga2_sysloglogger" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_sysloglogger</h2>
+
+<p>LWRP <code>sysloglogger</code> creates an icinga <code>SyslogLogger</code> object.</p>
+
+<p><strong>LWRP SyslogLogger example</strong></p>
+
+<pre><code>icinga2_sysloglogger 'sysloglogger' do
+  severity 'critical'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>SyslogLogger</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>name</em>(name_attribute)    - icinga <code>SyslogLogger</code> name</li>
+<li>
+<em>severity</em> (optional) - icinga <code>SyslogLogger</code> attribute <code>port</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_applynotification" class="anchor" href="#lwrp-icinga2_applynotification" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applynotification</h2>
 
 <p>To be added.</p>
 
@@ -995,7 +1524,7 @@ end
 <p>To be added.</p>
 
 <h2>
-<a id="lwrp-icinga2_timeperiod" class="anchor" href="#lwrp-icinga2_timeperiod" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_timeperiod</h2>
+<a id="lwrp-icinga2_applydependency" class="anchor" href="#lwrp-icinga2_applydependency" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applydependency</h2>
 
 <p>To be added.</p>
 
