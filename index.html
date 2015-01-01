@@ -84,12 +84,35 @@ what you find missing!</p>
 <h2>
 <a id="supported-icinga2-install-types" class="anchor" href="#supported-icinga2-install-types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supported Icinga2 Install Types</h2>
 
-<p>Currently Icinga2 installation is supported <strong>ONLY</strong> via Repository Packages.</p>
+<p>Currently Icinga2 installation is supported <strong>ONLY</strong> via Repository Packages, as it is a recommended best practice.</p>
 
 <h2>
 <a id="icinga2-server-setup" class="anchor" href="#icinga2-server-setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Server Setup</h2>
 
 <p>To setup icinga2 server on a node, add recipe <code>icinga2::server</code> which will install necessary packages and configuration files.</p>
+
+<h2>
+<a id="icing2-with-pnp4nagios" class="anchor" href="#icing2-with-pnp4nagios" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icing2 with PNP4Nagios</h2>
+
+<p>Recipe <code>icinga2::server_pnp</code> setup and configures <code>PNP4Nagios</code> along with <code>rrdtool</code>.</p>
+
+<p>Simply add recipe <code>icinga2::server_pnp</code> to icinga2 server <code>run_list</code> to setup <code>PNP4Nagios</code> along with <code>rrdcached</code>.</p>
+
+<p>For PNP4Nagios cookbook <code>pnp4nagios</code> is used and for RRDTool cookbook <code>rrdtool</code> is used.</p>
+
+<h2>
+<a id="icinga2-agent-client" class="anchor" href="#icinga2-agent-client" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Agent Client</h2>
+
+<p>NRPE Client recipe was removed from this cookbook in favor of <code>nrpe</code> cookbook.</p>
+
+<p>Icinga2 Agent setup will be added soon.</p>
+
+<h2>
+<a id="icinga2-web--classic-ui-engine" class="anchor" href="#icinga2-web--classic-ui-engine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Web / Classic UI engine</h2>
+
+<p>Currently this cookbook only supports <code>Apache</code> as Web engine and configuration is managed by cookbook <code>apache2</code>.</p>
+
+<p>Web engine is configurable by node attribute <code>node['icinga2']['web_engine']</code>, defaults to <code>apache</code>.</p>
 
 <h2>
 <a id="icinga2-classic-ui" class="anchor" href="#icinga2-classic-ui" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Classic UI</h2>
@@ -214,25 +237,46 @@ automation around Chef environment.</p>
 <p>A resource attribute will be added to <code>icinga2_host</code> LWRP to perform a search to fetch custom vars defined for a node, so that manual addition is not required.</p>
 
 <h2>
-<a id="icing2-with-pnp4nagios" class="anchor" href="#icing2-with-pnp4nagios" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icing2 with PNP4Nagios</h2>
+<a id="icinga2-user-defined-objects--configuration" class="anchor" href="#icinga2-user-defined-objects--configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>icinga2 User Defined Objects / Configuration</h2>
 
-<p>Recipe <code>icinga2::server_pnp</code> setup and configures <code>PNP4Nagios</code> with <code>rrdcached</code> daemon.</p>
+<p>A configuration directory is created under <code>/etc/icinga2</code> for user to put configuration not default to <code>icinga2</code> or LWRP.</p>
 
-<p>Simply add recipe <code>icinga2::server_pnp</code> to icinga2 server <code>run_list</code> to setup <code>PNP4Nagios</code> along with <code>rrdcached</code>.</p>
+<p>Directory name is configurable using node attribute <code>node['icinga2']['user_defined_objects_d']</code>.</p>
 
-<h2>
-<a id="client" class="anchor" href="#client" aria-hidden="true"><span class="octicon octicon-link"></span></a>Client</h2>
-
-<p>NRPE Client recipe has been removed from this cookbook.</p>
-
-<p>Icinga2 Agent setup will be added soon.</p>
+<p>This is just to keep user custom defined configuration, it is included in <code>icinga2.conf</code>.</p>
 
 <h2>
 <a id="lwrp-examples" class="anchor" href="#lwrp-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP Examples</h2>
 
 <p>Different LWRP usage examples are added to <code>examples</code> directory.</p>
 
-<p>To configure icinga2 server, check <code>examples/icinga2_server</code> directory. More exaamples will be added here upon further testing.</p>
+<p>To configure icinga2 server, check <code>examples/icinga2_server</code> directory. More examples will be added as we go.</p>
+
+<h2>
+<a id="lwrp-assign-where-and-ignore-where-statements" class="anchor" href="#lwrp-assign-where-and-ignore-where-statements" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP 'assign where' and 'ignore where' statements</h2>
+
+<p><strong>assign where (icinga) == assign_where (LWRP)</strong></p>
+
+<p><strong>ignore where (icinga) == ignore_where (LWRP)</strong></p>
+
+<p><code>assign where</code> statements are defined as a LWRP resource <code>Array</code> attribute -<code>assign_where</code>. Each aray element is treated as a different <code>assign where</code> statement and LWRP creates a separate statement.</p>
+
+<p>e.g.</p>
+
+<pre><code>assign_where ['host.address',
+  'host.vars.nrpe &amp;&amp; host.vars.enable_check',
+  'host.vars.application == "redis"'
+]
+</code></pre>
+
+<p>Above LWRP resource will be applied to an <code>Object</code> as shown below:</p>
+
+<pre><code>assign where host.address
+assign where host.vars.nrpe &amp;&amp; host.vars.enable_check
+assign where host.vars.application == "redis"
+</code></pre>
+
+<p>Similarly, <code>ignore where</code> statements are configured using LWRP resoruce <code>Array</code> attribute <code>ignore_where</code>.</p>
 
 <h2>
 <a id="icinga2-lwrp-resources" class="anchor" href="#icinga2-lwrp-resources" aria-hidden="true"><span class="octicon octicon-link"></span></a>icinga2 LWRP Resources</h2>
@@ -271,6 +315,53 @@ automation around Chef environment.</p>
 <p>Few of LWRP attributes which are required to create an icinga2 Object are not declared <code>:required =&gt; true</code> in LWRP in favour of creating icinga2 Object template.</p>
 
 <p>Same LWRP resource used to create icinga2 <code>Object</code>, can also be used to create icinga2 <code>Template</code> as well.</p>
+
+<h2>
+<a id="icinga2-lwrp-resources-generated-objecttemplate-file" class="anchor" href="#icinga2-lwrp-resources-generated-objecttemplate-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>icinga2 LWRP Resources Generated Object/Template File</h2>
+
+<p><strong>LWRP Resource Object Config File Location</strong></p>
+
+<p>Icinga2 <code>Object</code> created by LWRP are stored under a separate directory <code>objects.d</code>. Directory name is configurable by node attribute <code>node['icinga2']['objects_d']</code>.</p>
+
+<p>This directory is created under icinga2 config directory <code>node['icinga2']['conf_dir']</code>.</p>
+
+<p><strong>LWRP Resource Object/Template Config File Name Convention</strong></p>
+
+<p>A LWRP generated icinga2 <code>Object's</code> are stored into a single file. It means each LWRP has its own conf file.</p>
+
+<p>As few of LWRP can create an <code>Object</code> and <code>Template</code>, below conf file name convention is followed through out LWRP resources.</p>
+
+<pre><code>Object conf file : "#{LWRP_NAME}.conf".
+Template conf file : "#{LWRP_NAME}_template.conf".
+</code></pre>
+
+<p>e.g.</p>
+
+<pre><code>LWRP `icinga2_host` object resources will create icinga2
+`Host` objects conf file - /etc/icinga2/objects.d/host.conf
+
+LWRP `icinga2_service` object resources will create icinga2
+`Service` objects conf file - /etc/icinga2/objects.d/service.conf
+
+LWRP `icinga2_service` tempalte resources will create icinga2
+`Service` templates conf file - /etc/icinga2/objects.d/service_template.conf
+
+LWRP `icinga2_applyservice` resources will create icinga2
+`apply Service` conf file - /etc/icinga2/objects.d/applyservice.conf
+
+and so on ..
+</code></pre>
+
+<p>All LWRP generated icinga2 object/template/apply conf files are kept in a single directory and managed separately.</p>
+
+<h2>
+<a id="default-icinga2-etcicinga2confdconf" class="anchor" href="#default-icinga2-etcicinga2confdconf" aria-hidden="true"><span class="octicon octicon-link"></span></a>Default icinga2 /etc/icinga2/{conf.d,*.conf}</h2>
+
+<p>As this cookbook supplies all necessary LWRP for icinga2 feature, object, template etc. it is a good practice and safe to say to use LWRP instead of managing configuration <code>/etc/icinga2/conf.d</code> or other <code>/etc/icinga2/*.conf</code> file.</p>
+
+<p>Default configuration varies from environment to environment and hence LWRP does not manage default configuration.</p>
+
+<p>Note: Default configuration file are not managed by this cookbook, apart from listed below:</p>
 
 <h2>
 <a id="lwrp-icinga2_environment" class="anchor" href="#lwrp-icinga2_environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_environment</h2>
@@ -1005,7 +1096,7 @@ end
 
 <pre><code>icinga2_zone 'zone' do
   endpoints %w(endpoint)
-  parent 'parent endpoint'
+  parent 'parent zone'
 end
 </code></pre>
 
@@ -1509,19 +1600,264 @@ end
 </ul>
 
 <h2>
-<a id="lwrp-icinga2_applynotification" class="anchor" href="#lwrp-icinga2_applynotification" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applynotification</h2>
-
-<p>To be added.</p>
-
-<h2>
 <a id="lwrp-icinga2_notification" class="anchor" href="#lwrp-icinga2_notification" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_notification</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>notification</code> creates an icinga <code>Notification</code> object.</p>
+
+<p><strong>LWRP Notification Object example</strong></p>
+
+<pre><code>icinga2_notification 'notification' do
+  import 'notification template'
+  host_name 'host'
+  service_name 'service'
+  users %w(user)
+  user_groups %w(usergroup)
+  interval 'interval'
+  period 'period'
+  states %w(OK Warning Critical Unknown Up Down)
+  types %w(Custom Acknowledgement Problem Recovery)
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>Notification</code> object.</p>
+
+<p><strong>LWRP Notification Template example</strong></p>
+
+<pre><code>icinga2_notification 'notification' do
+  template true
+  period '24x7'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>Notification</code> template.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>import</em> (optional)   - icinga <code>Notification</code> attribute <code>import</code>
+</li>
+<li>
+<em>host_name</em> (optional)    - icinga <code>Notification</code> attribute <code>host_name</code>
+</li>
+<li>
+<em>service_name</em> (optional) - icinga <code>Notification</code> attribute <code>service_name</code>
+</li>
+<li>
+<em>users</em> (optional)    - icinga <code>Notification</code> attribute <code>users</code>
+</li>
+<li>
+<em>user_groups</em> (optional)  - icinga <code>Notification</code> attribute <code>user_groups</code>
+</li>
+<li>
+<em>times</em> (optional)    - icinga <code>Notification</code> attribute <code>times</code>
+</li>
+<li>
+<em>command</em> (optional)  - icinga <code>Notification</code> attribute <code>command</code>
+</li>
+<li>
+<em>interval</em> (optional) - icinga <code>Notification</code> attribute <code>interval</code>
+</li>
+<li>
+<em>period</em> (optional)   - icinga <code>Notification</code> attribute <code>period</code>
+</li>
+<li>
+<em>zone</em> (optional) - icinga <code>Notification</code> attribute <code>zone</code>
+</li>
+<li>
+<em>types</em> (optional)    - icinga <code>Notification</code> attribute <code>types</code>
+</li>
+<li>
+<em>states</em> (optional)   - icinga <code>Notification</code> attribute <code>states</code>
+</li>
+<li>
+<em>custom_vars</em> (optional)  - icinga <code>Notification</code> attribute <code>vars</code>
+</li>
+<li>
+<em>template</em> (optional) - whether to create a <code>Notification</code> template</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_applynotification" class="anchor" href="#lwrp-icinga2_applynotification" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applynotification</h2>
+
+<p>LWRP <code>applynotification</code> creates an icinga <code>apply Notification</code> object for <code>Host</code> and <code>Service</code>.</p>
+
+<p><strong>LWRP apply Notification Service Object example</strong></p>
+
+<pre><code>icinga2_applynotification 'servicenotification' do
+  object_type 'Service'
+  command 'mail-service-notification'
+  users %w(user)
+  interval '1h'
+  assign_where ['host.address &amp;&amp; host.vars.environment == "development"']
+  ignore_where ['host.vars.monitoring_disabled == true']
+end
+</code></pre>
+
+<p>Above LWRP resource will apply <code>Notification</code> to all <code>Service</code> objects for provided <code>assign where</code> statements and ignore for specified <code>ignore where</code> statements.</p>
+
+<p><strong>LWRP apply Notification Host Object example</strong></p>
+
+<pre><code>icinga2_applynotification 'hostnotification' do
+  object_type 'Host'
+  command 'mail-host-notification'
+  users %w(user)
+  interval '1h'
+  assign_where ['host.address &amp;&amp; host.vars.environment == "development"']
+  ignore_where ['host.vars.monitoring_disabled == true']
+end
+</code></pre>
+
+<p>Above LWRP resource will apply <code>Notification</code> to all <code>Host</code> objects for provided <code>assign_where</code> statements and ignore for specified <code>ignore_where</code> statements.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>object_type</em> (required)  - apply Notification to <code>Host</code> or <code>Service</code>, valid values are: Host Service</li>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>import</em> (optional)   - icinga <code>Notification</code> attribute <code>import</code>
+</li>
+<li>
+<em>users</em> (optional)    - icinga <code>Notification</code> attribute <code>users</code>
+</li>
+<li>
+<em>user_groups</em> (optional)  - icinga <code>Notification</code> attribute <code>user_groups</code>
+</li>
+<li>
+<em>times</em> (optional)    - icinga <code>Notification</code> attribute <code>times</code>
+</li>
+<li>
+<em>command</em> (optional)  - icinga <code>Notification</code> attribute <code>command</code>
+</li>
+<li>
+<em>interval</em> (optional) - icinga <code>Notification</code> attribute <code>interval</code>
+</li>
+<li>
+<em>period</em> (optional)   - icinga <code>Notification</code> attribute <code>period</code>
+</li>
+<li>
+<em>types</em> (optional)    - icinga <code>Notification</code> attribute <code>types</code>
+</li>
+<li>
+<em>states</em> (optional)   - icinga <code>Notification</code> attribute <code>states</code>
+</li>
+<li>
+<em>assign_where</em> (optional) - icinga <code>assign where</code> statements</li>
+<li>
+<em>ignore_where</em> (optional) - icinga <code>ignore where</code> statements</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_notificationcommand" class="anchor" href="#lwrp-icinga2_notificationcommand" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_notificationcommand</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>notificationcommand</code> creates an icinga <code>NotificationCommand</code> object.</p>
+
+<p><strong>LWRP NotificationCommand example</strong></p>
+
+<pre><code>icinga2_notificationcommand 'mail-service-notification' do
+  command ['SysconfDir + "/icinga2/scripts/mail-service-notification.sh"']
+  env 'NOTIFICATIONTYPE' =&gt; '$notification.type$', \
+    'SERVICEDESC' =&gt; '$service.name$',\
+    'HOSTALIAS' =&gt; '$host.display_name$',\
+    'HOSTADDRESS' =&gt; '$address$',\
+    'SERVICESTATE' =&gt; '$service.state$',\
+    'LONGDATETIME' =&gt; '$icinga.long_date_time$',\
+    'SERVICEOUTPUT' =&gt; '$service.output$',\
+    'NOTIFICATIONAUTHORNAME' =&gt; '$notification.author$',\
+    'NOTIFICATIONCOMMENT' =&gt; '$notification.comment$',\
+    'HOSTDISPLAYNAME' =&gt; '$host.display_name$',\
+    'SERVICEDISPLAYNAME' =&gt; '$service.display_name$',\
+    'USEREMAIL' =&gt; '$user.email$'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>NotificationCommand</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>import</em> (optional)   - default plugin-notification-command, icinga <code>NotificationCommand</code> attribute <code>cert_path</code>
+</li>
+<li>
+<em>command</em> (optional)  - icinga <code>NotificationCommand</code> attribute <code>command</code>
+</li>
+<li>
+<em>env</em> (optional)  - icinga <code>NotificationCommand</code> attribute <code>env</code>
+</li>
+<li>
+<em>timeout</em> (optional)  - icinga <code>NotificationCommand</code> attribute <code>timeout</code>
+</li>
+<li>
+<em>zone</em> (optional) - icinga <code>NotificationCommand</code> attribute <code>zone</code>
+</li>
+<li>
+<em>arguments</em> (optional)    - icinga <code>NotificationCommand</code> attribute <code>arguments</code>
+</li>
+<li>
+<em>custom_vars</em> (optional)  - icinga <code>NotificationCommand</code> attribute <code>vars</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_apilistener" class="anchor" href="#lwrp-icinga2_apilistener" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_apilistener</h2>
+
+<p>LWRP <code>apilistener</code> creates an icinga <code>ApiListener</code> object.</p>
+
+<p><strong>LWRP ApiListener example</strong></p>
+
+<pre><code>icinga2_apilistener 'master' do
+  cert_path 'SysconfDir + "/icinga2/pki/" + NodeName + ".crt"'
+  key_path 'SysconfDir + "/icinga2/pki/" + NodeName + ".key"'
+  ca_path 'SysconfDir + "/icinga2/pki/ca.crt"'
+  bind_host 'host address'
+  bind_port '5665'
+  ticket_salt 'TicketSalt'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>ApiListener</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>cert_path</em> (optional)    - icinga <code>ApiListener</code> attribute <code>cert_path</code>
+</li>
+<li>
+<em>key_path</em> (optional) - icinga <code>ApiListener</code> attribute <code>key_path</code>
+</li>
+<li>
+<em>ca_path</em> (optional)  - icinga <code>ApiListener</code> attribute <code>ca_path</code>
+</li>
+<li>
+<em>crl_path</em> (optional) - icinga <code>ApiListener</code> attribute <code>crl_path</code>
+</li>
+<li>
+<em>bind_host</em> (optional)    - icinga <code>ApiListener</code> attribute <code>bind_host</code>
+</li>
+<li>
+<em>bind_port</em> (optional)    - icinga <code>ApiListener</code> attribute <code>bind_port</code>
+</li>
+<li>
+<em>ticket_salt</em> (optional)  - icinga <code>ApiListener</code> attribute <code>ticket_salt</code>
+</li>
+<li>
+<em>accept_config</em> (optional)    - icinga <code>ApiListener</code> attribute <code>accept_config</code>
+</li>
+<li>
+<em>accept_commands</em> (optional)  - icinga <code>ApiListener</code> attribute <code>accept_commands</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_applydependency" class="anchor" href="#lwrp-icinga2_applydependency" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applydependency</h2>
