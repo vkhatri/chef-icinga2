@@ -49,10 +49,13 @@ what you find missing!</p>
 <li><p><code>icinga2::default</code>        - does not do anything, used for LWRP usage</p></li>
 <li><p><code>icinga2::server</code>         - install &amp; configure icinga2 server with default incinga Objects</p></li>
 <li><p><code>icinga2::server_apache</code>      - manages apache and icinga2 classic ui / web / web2 vhost using <code>apache2</code> cookbook</p></li>
+<li><p><code>icinga2::server_os_packages</code>         - install os packages for icinga2</p></li>
 <li><p><code>icinga2::server_install</code>         - install icinga2 core/ido server packages</p></li>
 <li><p><code>icinga2::server_core</code>            - configures icinga2 core configuration files &amp; directories</p></li>
 <li><p><code>icinga2::server_features</code>        - enable/disable icinga2 features</p></li>
+<li><p><code>icinga2::server_ido_schema</code>          - load icinga2 ido db schema</p></li>
 <li><p><code>icinga2::server_classic_ui</code>          - configures icinga2 classic ui</p></li>
+<li><p><code>icinga2::server_web2</code>        - configures icingaweb2</p></li>
 <li><p><code>icinga2::server_pnp</code>         - configures pnp4nagios for icinga2</p></li>
 <li><p><code>icinga2::server_objects</code>         - manages icinga2 default objects/templates objects if <code>node['icinga2']['disable_conf_d']</code> is set in which case <code>conf.d</code> objects config is not included in <code>icinga2.conf</code> and objects are created using LWRP</p></li>
 <li><p><code>icinga2::server_object_host</code>     - creates icinga2 <code>generic-host</code> <code>Host</code> template</p></li>
@@ -183,14 +186,46 @@ node['icinga2']['classic_ui']['authorized_for_all_host_commands']
 </code></pre>
 
 <h2>
-<a id="icinga-web2" class="anchor" href="#icinga-web2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga Web2</h2>
+<a id="icinga2-server-ido-schema-load" class="anchor" href="#icinga2-server-ido-schema-load" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Server IDO Schema Load</h2>
 
-<p>Icingaweb2 recipe setup is work in progress.</p>
+<p>Icinga2 IDO setup &amp; feature is disabled by default. It can be enabled by configuring node attribute <code>node['icinga2']['ido']['load_schema']</code>.</p>
+
+<p>Recipe <code>icinga::server_ido_schema</code> only create DB schema, it does not create database or user or grants etc.</p>
+
+<p>IDO schema files are stored by default under directory <code>/usr/share/icinga2-ido-mysql</code> and <code>/usr/share/icinga2-ido-pgsql</code>.</p>
+
+<p>Icinga2 IDO type is configurable by node attribute <code>node['icinga2']['ido']['type']</code>, which can be configured to <code>mysql</code> or <code>pgsql</code>.</p>
+
+<blockquote>
+<blockquote>
+<p>ido pgsql schema upload is not fully tested, please open an issue if encounter any problem.</p>
+</blockquote>
+</blockquote>
+
+<h2>
+<a id="icinga-web2-setup" class="anchor" href="#icinga-web2-setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga Web2 Setup</h2>
+
+<p>Icingaweb2 is not enabled by default. It can be enabled by configuring node attribute <code>node['icinga2']['web2']['enable']</code>.</p>
+
+<p>Icingaweb2 can also be enabled by including recipe <code>icinga2::server_web2</code> to node <code>run_list</code>.</p>
+
+<p>Recipe <code>icinga::server_web2</code> configures below items.</p>
+
+<ul>
+<li>create config directory <code>/etc/icingaweb2</code>
+</li>
+<li>create token file <code>/etc/icingaweb2/setup.token</code>
+</li>
+<li>create log directory <code>/var/log/icingaweb2</code>
+</li>
+</ul>
+
+<p>Rest of the configuration can be completed by berowsing icingaweb2 Web UI <code>http://server/icingaweb</code>.</p>
 
 <h2>
 <a id="icinga2-cluster-deployment" class="anchor" href="#icinga2-cluster-deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Cluster Deployment</h2>
 
-<p>Icinga2 Distributes / HA cluster setup examples will be added soon.</p>
+<p>Icinga2 Distributed / HA cluster setup examples will be added soon.</p>
 
 <h2>
 <a id="icinga2-monitor-a-chef-environment-nodes" class="anchor" href="#icinga2-monitor-a-chef-environment-nodes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Monitor a Chef Environment Nodes</h2>
@@ -309,12 +344,44 @@ assign where host.vars.application == "redis"
 <li>icinga2_timeperiod</li>
 <li>icinga2_user</li>
 <li>icinga2_usergroup</li>
-<li>icinga2_zone</li>
+<li><p>icinga2_zone</p></li>
+<li><p>icinga2_livestatuslistener</p></li>
+<li>icinga2_statusdatawriter</li>
+<li>icinga2_compatlogger</li>
+<li>icinga2_checkresultreader</li>
+<li>icinga2_checkercomponent</li>
+<li>icinga2_notificationcomponent</li>
+<li>icinga2_filelogger</li>
+<li>icinga2_perfdatawriter</li>
 </ul>
 
-<p>Few of LWRP attributes which are required to create an icinga2 Object are not declared <code>:required =&gt; true</code> in LWRP in favour of creating icinga2 Object template.</p>
+<p>Note:</p>
 
-<p>Same LWRP resource used to create icinga2 <code>Object</code>, can also be used to create icinga2 <code>Template</code> as well.</p>
+<ul>
+<li><p>Few of LWRP attributes which are required to create an icinga2 Object are not declared <code>:required =&gt; true</code> in LWRP in favour of creating icinga2 Object template.</p></li>
+<li><p>Same LWRP resource used to create icinga2 <code>Object</code>, can also be used to create icinga2 <code>Template</code> as well.</p></li>
+<li><p>Few of LWRP resource attributes which refers to icinga2 <code>constants</code> or can refer to <code>constants</code> are treated as literal <code>String</code>. It means they will not be transformed into ruby <code>String</code> by LWRP while creating configutation file.</p></li>
+</ul>
+
+<p>e.g.</p>
+
+<p>Below attribute definition generate correct syntax for <code>ApiListener</code> LWRP attribute <code>cert_path</code>:</p>
+
+<pre><code>    cert_path 'SysConf + "/icinga2/pki/" + NodeName + ".crt"'
+
+    will transform to:
+
+    cert_path SysConf + "/icinga2/pki/" + NodeName + ".crt"
+</code></pre>
+
+<p>While below attribute definition generate incorrect syntax:</p>
+
+<pre><code>    cert_path 'SysConf + /icinga2/pki/ + NodeName + .crt'
+
+    will transform to
+
+    cert_path SysConf + /icinga2/pki/ + NodeName + .crt
+</code></pre>
 
 <h2>
 <a id="icinga2-lwrp-resources-generated-objecttemplate-file" class="anchor" href="#icinga2-lwrp-resources-generated-objecttemplate-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>icinga2 LWRP Resources Generated Object/Template File</h2>
@@ -355,13 +422,19 @@ and so on ..
 <p>All LWRP generated icinga2 object/template/apply conf files are kept in a single directory and managed separately.</p>
 
 <h2>
-<a id="default-icinga2-etcicinga2confdconf" class="anchor" href="#default-icinga2-etcicinga2confdconf" aria-hidden="true"><span class="octicon octicon-link"></span></a>Default icinga2 /etc/icinga2/{conf.d,*.conf}</h2>
+<a id="default-icinga2-etcicinga2confdzonesconf" class="anchor" href="#default-icinga2-etcicinga2confdzonesconf" aria-hidden="true"><span class="octicon octicon-link"></span></a>Default icinga2 /etc/icinga2/{conf.d,zones.conf}</h2>
 
-<p>As this cookbook supplies all necessary LWRP for icinga2 feature, object, template etc. it is a good practice and safe to say to use LWRP instead of managing configuration <code>/etc/icinga2/conf.d</code> or other <code>/etc/icinga2/*.conf</code> file.</p>
+<p>As this cookbook supplies almost all necessary LWRP for icinga2 feature, object, template etc. it is a good practice and safe to say to use LWRP instead of managing configuration <code>/etc/icinga2/conf.d</code> or <code>/etc/icinga2/zones.conf</code> default configuration files.</p>
 
-<p>Default configuration varies from environment to environment and hence LWRP does not manage default configuration.</p>
+<p>Note: Default configuration files managed by cookbook:</p>
 
-<p>Note: Default configuration file are not managed by this cookbook, apart from listed below:</p>
+<ul>
+<li>/etc/icinga2/constants.conf</li>
+<li>/etc/icinga2/icinga2.conf</li>
+<li>/etc/icinga2/init.conf</li>
+</ul>
+
+<p><code>icinga2.conf</code> no longer includes <code>zones.conf</code> in favor of LWRP.</p>
 
 <h2>
 <a id="lwrp-icinga2_environment" class="anchor" href="#lwrp-icinga2_environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_environment</h2>
@@ -1865,6 +1938,46 @@ end
 <p>To be added.</p>
 
 <h2>
+<a id="lwrp-icinga2_livestatuslistener" class="anchor" href="#lwrp-icinga2_livestatuslistener" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_livestatuslistener</h2>
+
+<p>To be added.</p>
+
+<h2>
+<a id="lwrp-icinga2_statusdatawriter" class="anchor" href="#lwrp-icinga2_statusdatawriter" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_statusdatawriter</h2>
+
+<p>To be added.</p>
+
+<h2>
+<a id="lwrp-icinga2_compatlogger" class="anchor" href="#lwrp-icinga2_compatlogger" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_compatlogger</h2>
+
+<p>To be added.</p>
+
+<h2>
+<a id="lwrp-icinga2_checkresultreader" class="anchor" href="#lwrp-icinga2_checkresultreader" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_checkresultreader</h2>
+
+<p>To be added.</p>
+
+<h2>
+<a id="lwrp-icinga2_checkercomponent" class="anchor" href="#lwrp-icinga2_checkercomponent" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_checkercomponent</h2>
+
+<p>To be added.</p>
+
+<h2>
+<a id="lwrp-icinga2_notificationcomponent" class="anchor" href="#lwrp-icinga2_notificationcomponent" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_notificationcomponent</h2>
+
+<p>To be added.</p>
+
+<h2>
+<a id="lwrp-icinga2_filelogger" class="anchor" href="#lwrp-icinga2_filelogger" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_filelogger</h2>
+
+<p>To be added.</p>
+
+<h2>
+<a id="lwrp-icinga2_perfdatawriter" class="anchor" href="#lwrp-icinga2_perfdatawriter" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_perfdatawriter</h2>
+
+<p>To be added.</p>
+
+<h2>
 <a id="cookbook-advanced-attributes" class="anchor" href="#cookbook-advanced-attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookbook Advanced Attributes</h2>
 
 <ul>
@@ -1909,6 +2022,7 @@ end
 <li><p><code>default['icinga2']['lib_dir']</code> (default: <code>/var/lib/icinga2</code>): icinga2 lib directory location</p></li>
 <li><p><code>default['icinga2']['log_dir']</code> (default: <code>/var/log/icinga2</code>): icinga2 core process log directory location</p></li>
 <li><p><code>default['icinga2']['cache_dir']</code> (default: <code>/var/cache/icinga2</code>): icinga2 cache directory location</p></li>
+<li><p><code>default['icinga2']['perfdata_dir']</code> (default: <code>/var/spool/icinga2/perfdata</code>): icinga2 perfdata directory location</p></li>
 <li><p><code>default['icinga2']['service_name']</code> (default: <code>icinga2'</code>): icinga2 process name*</p></li>
 <li><p><code>default['icinga2']['service_config_file']</code> (default: <code>/etc/default/icinga2</code>): icinga2 * process configuration file</p></li>
 <li><p><code>default['icinga2']['plugins_dir']</code> (default: <code>/usr/lib/nagios/plugins</code>): icinga2 plugins directory location</p></li>
@@ -1916,6 +2030,9 @@ end
 <li><p><code>default['icinga2']['admin_user']</code> (default: <code>icingaadmin</code>): icinga2 admin user</p></li>
 <li><p><code>default['icinga2']['user']</code> (default: <code>icinga</code>): icinga2 user</p></li>
 <li><p><code>default['icinga2']['group']</code> (default: <code>icinga</code>): icinga2 user group</p></li>
+<li><p><code>default['icinga2']['cmdgroup']</code> (default: <code>icingacmd</code>): icinga2 cmd user group</p></li>
+<li><p><code>default['icinga2']['user_defined_objects_d']</code> (default: <code>user_defined_objects</code>): icinga2 conf directory name for user defined objects</p></li>
+<li><p><code>default['icinga2']['user_defined_objects_dir']</code> (default: <code>/etc/icinga2/user_defined_objects</code>): icinga2 conf directory for user defined objects</p></li>
 <li><p><code>default['icinga2']['cmdgroup']</code> (default: <code>icingacmd</code>): icinga2 cmd user group</p></li>
 </ul>
 
@@ -1950,6 +2067,31 @@ end
 <li><p><code>default['icinga2']['server']['object']['host']['zone']</code> (default: <code>nil</code>)</p></li>
 <li><p><code>default['icinga2']['server']['object']['host']['command_endpoint']</code> (default: <code>nil</code>)</p></li>
 <li><p><code>default['icinga2']['server']['object']['host']['zone_attribute']</code> (default: <code>icinga2_zone</code>)</p></li>
+</ul>
+
+<h2>
+<a id="cookbook-icinga2-ido-attributes" class="anchor" href="#cookbook-icinga2-ido-attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookbook Icinga2 IDO Attributes</h2>
+
+<ul>
+<li><p><code>default[:icinga2][:ido][:type]</code> (default: <code>mysql</code>): icinga2 ido type, valid are <code>mysql pgsql</code></p></li>
+<li><p><code>default[:icinga2][:ido][:load_schema]</code> (default: <code>false</code>): whether to load db schema</p></li>
+<li><p><code>default[:icinga2][:ido][:db_host]</code> (default: <code>localhost</code>): Icinga2 ido db host</p></li>
+<li><p><code>default[:icinga2][:ido][:db_name]</code> (default: <code>icinga</code>): Icinga2 ido db name</p></li>
+<li><p><code>default[:icinga2][:ido][:db_user]</code> (default: <code>icinga</code>): Icinga2 ido db user</p></li>
+<li><p><code>default[:icinga2][:ido][:db_password]</code> (default: <code>icinga</code>): Icinga2 ido db password</p></li>
+</ul>
+
+<h2>
+<a id="cookbook-icingaweb2-attributes" class="anchor" href="#cookbook-icingaweb2-attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookbook Icingaweb2 Attributes</h2>
+
+<ul>
+<li><p><code>default[:icinga2][:web2][:enable]</code> (default: <code>false</code>): whether to setup icingaweb2</p></li>
+<li><p><code>default[:icinga2][:web2][:source_url]</code> (default: <code>git://git.icinga.org/icingaweb2.git</code>):</p></li>
+<li><p><code>default[:icinga2][:web2][:version]</code> (default: <code>master</code>): icingaweb2 git checkout version / branch / tag etc.</p></li>
+<li><p><code>default[:icinga2][:web2][:web_root]</code> (default: <code>/usr/share/icingaweb2</code>): icingaweb2 web root location</p></li>
+<li><p><code>default[:icinga2][:web2][:web_uri]</code> (default: <code>/icingaweb</code>): icingweb2 web uri</p></li>
+<li><p><code>default[:icinga2][:web2][:conf_dir]</code> (default: <code>/etc/icingaweb2</code>): icingaweb2 config directory</p></li>
+<li><p><code>default[:icinga2][:web2][:log_dir]</code> (default: <code>/var/log/icingaweb2</code>): icingaweb2 log directory</p></li>
 </ul>
 
 <h2>
