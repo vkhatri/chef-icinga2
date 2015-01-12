@@ -3,6 +3,10 @@ icinga2 Cookbook
 
 [![Build Status](https://travis-ci.org/vkhatri/chef-icinga2.svg?branch=master)](https://travis-ci.org/vkhatri/chef-icinga2)
 
+
+# This cookbook has been moved to [Icinga/chef-icinga2] and no longer managed under this github account.
+
+
 This is a [Chef] cookbook to manage [Icinga2] using Chef LWRP.
 
 
@@ -2058,3 +2062,4 @@ limitations under the License.
 [Chef]: https://www.chef.io/
 [Contributors]: https://github.com/vkhatri/chef-icinga2/graphs/contributors
 [Install]: https://github.com/icinga/icinga2/
+[Icinga/chef-icinga2]: https://github.com/Icinga/chef-icinga2
