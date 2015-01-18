@@ -4,7 +4,7 @@ icinga2 Cookbook
 [![Build Status](https://travis-ci.org/vkhatri/chef-icinga2.svg?branch=master)](https://travis-ci.org/vkhatri/chef-icinga2)
 
 
-# This cookbook has been moved to [Icinga/chef-icinga2] and no longer managed under this github account.
+# This cookbook has been moved to [Icinga/chef-icinga2] and no longer maintained here.
 
 
 This is a [Chef] cookbook to manage [Icinga2] using Chef LWRP.
