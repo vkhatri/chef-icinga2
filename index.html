@@ -1,36 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Chef Icinga2 by vkhatri</title>
+    <meta name="description" content="Chef Icinga2 : Chef Cookbook to Manage Icinga2 Server">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <title>Chef Icinga2</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Chef Icinga2</h1>
-        <p>Chef Cookbook to Manage Icinga2 Server</p>
-        <p class="view"><a href="https://github.com/vkhatri/chef-icinga2">View the Project on GitHub <small>vkhatri/chef-icinga2</small></a></p>
-        <ul>
-          <li><a href="https://github.com/vkhatri/chef-icinga2/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/vkhatri/chef-icinga2/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/vkhatri/chef-icinga2">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/vkhatri/chef-icinga2">View on GitHub</a>
+
+          <h1 id="project_title">Chef Icinga2</h1>
+          <h2 id="project_tagline">Chef Cookbook to Manage Icinga2 Server</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/vkhatri/chef-icinga2/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/vkhatri/chef-icinga2/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>
 <a id="icinga2-cookbook" class="anchor" href="#icinga2-cookbook" aria-hidden="true"><span class="octicon octicon-link"></span></a>icinga2 Cookbook</h1>
 
 <p><a href="https://travis-ci.org/vkhatri/chef-icinga2"><img src="https://travis-ci.org/vkhatri/chef-icinga2.svg?branch=master" alt="Build Status"></a></p>
+
+<h1>
+<a id="this-cookbook-has-been-moved-to-icingachef-icinga2-and-no-longer-maintained-here" class="anchor" href="#this-cookbook-has-been-moved-to-icingachef-icinga2-and-no-longer-maintained-here" aria-hidden="true"><span class="octicon octicon-link"></span></a>This cookbook has been moved to <a href="https://github.com/Icinga/chef-icinga2">Icinga/chef-icinga2</a> and no longer maintained here.</h1>
 
 <p>This is a <a href="https://www.chef.io/">Chef</a> cookbook to manage <a href="https://www.icinga.org/">Icinga2</a> using Chef LWRP.</p>
 
@@ -43,11 +50,37 @@ what you find missing!</p>
 <p><a href="https://github.com/vkhatri/chef-icinga2">https://github.com/vkhatri/chef-icinga2</a></p>
 
 <h2>
+<a id="major-changes" class="anchor" href="#major-changes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Major Changes</h2>
+
+<h3>
+<a id="v070" class="anchor" href="#v070" aria-hidden="true"><span class="octicon octicon-link"></span></a>v0.7.0</h3>
+
+<ul>
+<li>
+<p>LWRP <code>environment</code> now generates different conf file with zone name if resource attribute <code>zone</code> is defined</p>
+
+<p><strong>file name:</strong></p>
+
+<p>file name without zone: <code>host_#{*environment*}.conf</code></p>
+
+<p>file name with zone: <code>host_#{environment*}_#{*zone*}.conf</code></p>
+
+<blockquote>
+<blockquote>
+<p>Note: Cookbook version prior to v0.7.0 users must delete
+  configuration file <code>host_#{*environment*}.conf</code> manually
+  if zone is defined.</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+
+<h2>
 <a id="recipes" class="anchor" href="#recipes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recipes</h2>
 
 <ul>
 <li><p><code>icinga2::default</code>        - does not do anything, used for LWRP usage</p></li>
-<li><p><code>icinga2::server</code>         - install &amp; configure icinga2 server with default incinga Objects</p></li>
+<li><p><code>icinga2::server</code>         - install &amp; configure icinga2 server with default icinga Objects</p></li>
 <li><p><code>icinga2::server_apache</code>      - manages apache and icinga2 classic ui / web / web2 vhost using <code>apache2</code> cookbook</p></li>
 <li><p><code>icinga2::server_os_packages</code>         - install os packages for icinga2</p></li>
 <li><p><code>icinga2::server_install</code>         - install icinga2 core/ido server packages</p></li>
@@ -106,7 +139,7 @@ what you find missing!</p>
 <h2>
 <a id="icinga2-agent-client" class="anchor" href="#icinga2-agent-client" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Agent Client</h2>
 
-<p>NRPE Client recipe was removed from this cookbook in favor of <code>nrpe</code> cookbook.</p>
+<p>NRPE Client recipe was removed from this cookbook in favour of <code>nrpe</code> cookbook.</p>
 
 <p>Icinga2 Agent setup will be added soon.</p>
 
@@ -165,7 +198,7 @@ node['icinga2']['classic_ui']['authorized_for_all_host_commands']
 <pre><code>default['icinga2']['classic_ui']['users']['guest'] = '$apr1$cA/eVUgT$aIoWUPwV5uONJoYslb7lg0'
 </code></pre>
 
-<p>Then authorize <code>guest</code> user to view <code>Host/Service</code> status</p>
+<p>Then authorise <code>guest</code> user to view <code>Host/Service</code> status</p>
 
 <pre><code>node['icinga2']['classic_ui']['authorized_for_all_services'] = %w(icingaadmin guest)
 node['icinga2']['classic_ui']['authorized_for_all_hosts'] = %w(icingaadmin guest)
@@ -220,7 +253,7 @@ node['icinga2']['classic_ui']['authorized_for_all_host_commands']
 </li>
 </ul>
 
-<p>Rest of the configuration can be completed by berowsing icingaweb2 Web UI <code>http://server/icingaweb</code>.</p>
+<p>Rest of the configuration can be completed by browsing icingaweb2 Web UI <code>http://server/icingaweb</code>.</p>
 
 <h2>
 <a id="icinga2-cluster-deployment" class="anchor" href="#icinga2-cluster-deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Icinga2 Cluster Deployment</h2>
@@ -242,7 +275,7 @@ automation around Chef environment.</p>
 <li><p>auto create <code>HostGroup</code> object for an entire chef environment</p></li>
 <li><p>auto create <code>HostGroup</code> object for node's <code>application</code> attribute to group nodes for an entire chef environment <code>application</code> type</p></li>
 <li><p>auto create <code>HostGroup</code> object for node's <code>cluster</code> attribute to group nodes for a chef environment <code>cluster</code></p></li>
-<li><p>auto add chef node Cloud attributes as <code>Host</code> custom <code>vars</code>, currently only AWS EC2 attributes are supported, but is easy to extend the suport to other cloud providers</p></li>
+<li><p>auto add chef node Cloud attributes as <code>Host</code> custom <code>vars</code>, currently only AWS EC2 attributes are supported, but is easy to extend the support to other cloud providers</p></li>
 <li><p>auto create <code>HostGroup</code> list for a chef environment node</p></li>
 <li><p>limit a chef environment spreaded across multiple regions to icinga2 server region, e.g. in multi region ec2 production environment, one would want to setup an icinga2 server in region <code>us-east-1</code> just to monitor <code>us-east-1</code> nodes, but not the production nodes of other regions, like <code>ap-southeast-1</code></p></li>
 <li><p>allow chef node to determine <code>host.address</code> from <code>node['fqdn']</code> DNS resolution instead of <code>node['ipaddress']</code> and either ignore chef node if failed to resolve DNS or fallback to use <code>node['ipaddress']</code> as <code>host.address</code></p></li>
@@ -250,7 +283,7 @@ automation around Chef environment.</p>
 <li><p>exclude a node by <code>run_list</code> role, not yet tested</p></li>
 <li><p>filter chef node if match certain node attributes</p></li>
 <li><p>override an environment and use an entire different <code>search_pattern</code>, this feature extends LWRP <code>environment</code> functionality to select nodes by a user given search pattern</p></li>
-<li><p><code>Host</code> object attribute <code>disply_name</code> is set to chef node hostname</p></li>
+<li><p><code>Host</code> object attribute <code>display_name</code> is set to chef node hostname</p></li>
 </ul>
 
 <p>Simply create a LWRP resource for a chef environment, to start monitoring all nodes in that environment. More details can be found in examples.</p>
@@ -294,7 +327,7 @@ automation around Chef environment.</p>
 
 <p><strong>ignore where (icinga) == ignore_where (LWRP)</strong></p>
 
-<p><code>assign where</code> statements are defined as a LWRP resource <code>Array</code> attribute -<code>assign_where</code>. Each aray element is treated as a different <code>assign where</code> statement and LWRP creates a separate statement.</p>
+<p><code>assign where</code> statements are defined as a LWRP resource <code>Array</code> attribute -<code>assign_where</code>. Each array element is treated as a different <code>assign where</code> statement and LWRP creates a separate statement.</p>
 
 <p>e.g.</p>
 
@@ -311,7 +344,7 @@ assign where host.vars.nrpe &amp;&amp; host.vars.enable_check
 assign where host.vars.application == "redis"
 </code></pre>
 
-<p>Similarly, <code>ignore where</code> statements are configured using LWRP resoruce <code>Array</code> attribute <code>ignore_where</code>.</p>
+<p>Similarly, <code>ignore where</code> statements are configured using LWRP resource <code>Array</code> attribute <code>ignore_where</code>.</p>
 
 <h2>
 <a id="icinga2-lwrp-resources" class="anchor" href="#icinga2-lwrp-resources" aria-hidden="true"><span class="octicon octicon-link"></span></a>icinga2 LWRP Resources</h2>
@@ -360,7 +393,7 @@ assign where host.vars.application == "redis"
 <ul>
 <li><p>Few of LWRP attributes which are required to create an icinga2 Object are not declared <code>:required =&gt; true</code> in LWRP in favour of creating icinga2 Object template.</p></li>
 <li><p>Same LWRP resource used to create icinga2 <code>Object</code>, can also be used to create icinga2 <code>Template</code> as well.</p></li>
-<li><p>Few of LWRP resource attributes which refers to icinga2 <code>constants</code> or can refer to <code>constants</code> are treated as literal <code>String</code>. It means they will not be transformed into ruby <code>String</code> by LWRP while creating configutation file.</p></li>
+<li><p>Few of LWRP resource attributes which refers to icinga2 <code>constants</code> or can refer to <code>constants</code> are treated as literal <code>String</code>. It means they will not be transformed into ruby <code>String</code> by LWRP while creating configuration file.</p></li>
 </ul>
 
 <p>e.g.</p>
@@ -434,14 +467,29 @@ and so on ..
 <li>/etc/icinga2/init.conf</li>
 </ul>
 
-<p><code>icinga2.conf</code> no longer includes <code>zones.conf</code> in favor of LWRP.</p>
+<p><code>icinga2.conf</code> no longer includes <code>zones.conf</code> in favour of LWRP.</p>
 
 <h2>
 <a id="lwrp-icinga2_environment" class="anchor" href="#lwrp-icinga2_environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_environment</h2>
 
 <p>As mentioned in a section above, instead of creating <code>Host</code> objects for each chef node, using LWRP <code>environment</code> <code>Host</code> objects can easily be created for all chef nodes for a chef environment.</p>
 
-<p>LWRP resource attributes are common for all the <code>Host</code>. It may be required to define or override attribute for few specific <code>Host</code> objects, but it is not yet incorporated or forseen any usage at this point which might change over time.</p>
+<p>LWRP resource attributes are common for all the <code>Host</code>. It may be required to define or override attribute for few specific <code>Host</code> objects, but it is not yet incorporated or foreseen any usage at this point which might change over time.</p>
+
+<p><strong>LWRP generated config file</strong></p>
+
+<p>There are two files generated by LWRP <code>environment</code>:</p>
+
+<ol>
+<li><p>if zone is not defined - <code>host_#{*environment*}.conf</code></p></li>
+<li><p>if zone is defined: <code>host_#{environment*}_#{*zone*}.conf</code></p></li>
+</ol>
+
+<blockquote>
+<blockquote>
+<p>Note: Cookbook version prior to v0.7.0 might require to manually delete configuration file <code>host_#{*environment*}.conf</code> if zone is defined.</p>
+</blockquote>
+</blockquote>
 
 <p><strong>LWRP example</strong></p>
 
@@ -475,7 +523,7 @@ end
 <li>
 <em>cluster_attribute</em> (optional)    -  chef node cluster attribute to create hostgroup and <code>Host</code> vars</li>
 <li>
-<em>application_attribute</em> (optional) - chef noder application attribute to create hostgroup and <code>Host</code> vars</li>
+<em>application_attribute</em> (optional) - chef node application attribute to create hostgroup and <code>Host</code> vars</li>
 <li>
 <em>enable_cluster_hostgroup</em> (optional) - whether to create <code>HostGroup</code> objects for chef node cluster's</li>
 <li>
@@ -495,11 +543,11 @@ end
 <del>- <em>exclude_roles</em> (optional)   - exclude chef node if <code>run_list</code> matches role, not yet tested </del>
 </li>
 <li>
-<em>env_custom_vars</em> (optional)  - add <code>Host</code> obect custom vars to all chef node</li>
+<em>env_custom_vars</em> (optional)  - add <code>Host</code> object custom vars to all chef node</li>
 <li>
 <em>limit_region</em> (optional) - whether to limit chef node to chef server region, currently tested for Amazon EC2, e.g. a icinga2 server located in region <code>us-east-1</code> will only collect nodes located in <code>us-east-</code>` region</li>
 <li>
-<em>server_region</em> (optional)    - icinga2 server region can be overriden if cloud provider is not supported by the cookbook using this attribute</li>
+<em>server_region</em> (optional)    - icinga2 server region can be overridden if cloud provider is not supported by the cookbook using this attribute</li>
 <li>
 <em>add_cloud_custom_vars</em> (optional)    - whether to add cloud attributes, currently supports amazon ec2, e.g. instance id, vpc subnet etc.</li>
 <li>
@@ -1933,47 +1981,262 @@ end
 </ul>
 
 <h2>
-<a id="lwrp-icinga2_applydependency" class="anchor" href="#lwrp-icinga2_applydependency" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applydependency</h2>
-
-<p>To be added.</p>
-
-<h2>
 <a id="lwrp-icinga2_livestatuslistener" class="anchor" href="#lwrp-icinga2_livestatuslistener" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_livestatuslistener</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>livestatuslistener</code> creates an icinga <code>LiveStatusListener</code> object.</p>
+
+<p><strong>LWRP LiveStatusListener example</strong></p>
+
+<pre><code>icinga2_livestatuslistener 'livestatuslistener' do
+  socket_type 'socket type'
+  socket_path 'socket path'
+  bind_host 'host address'
+  bind_port 'host port'
+  compat_log_path 'log path'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>LiveStatusListener</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>socket_type</em> (optional)  - icinga <code>LiveStatusListener</code> attribute <code>socket_type</code>
+</li>
+<li>
+<em>socket_path</em> (optional)  - icinga <code>LiveStatusListener</code> attribute <code>socket_path</code>
+</li>
+<li>
+<em>bind_host</em> (optional)    - icinga <code>LiveStatusListener</code> attribute <code>bind_host</code>
+</li>
+<li>
+<em>bind_port</em> (optional)    - icinga <code>LiveStatusListener</code> attribute <code>bind_port</code>
+</li>
+<li>
+<em>compat_log_path</em> (optional)  - icinga <code>LiveStatusListener</code> attribute <code>compat_log_path</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_statusdatawriter" class="anchor" href="#lwrp-icinga2_statusdatawriter" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_statusdatawriter</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>statusdatawriter</code> creates an icinga <code>StatusDataWriter</code> object.</p>
+
+<p><strong>LWRP StatusDataWriter example</strong></p>
+
+<pre><code>icinga2_statusdatawriter 'statusdatawriter' do
+  status_path 'status path'
+  objects_path 'objects path'
+  update_interval 'update interval'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>StatusDataWriter</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default compat, icinga <code>StatusDataWriter</code> Object <code>library</code>
+</li>
+<li>
+<em>status_path</em> (optional)  - icinga <code>StatusDataWriter</code> attribute <code>status_path</code>
+</li>
+<li>
+<em>objects_path</em> (optional) - icinga <code>StatusDataWriter</code> attribute <code>objects_path</code>
+</li>
+<li>
+<em>update_interval</em> (optional)  - icinga <code>StatusDataWriter</code> attribute <code>update_interval</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_compatlogger" class="anchor" href="#lwrp-icinga2_compatlogger" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_compatlogger</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>compatlogger</code> creates an icinga <code>CompatLogger</code> object.</p>
+
+<p><strong>LWRP CompatLogger example</strong></p>
+
+<pre><code>icinga2_compatlogger 'compatlogger' do
+  log_dir 'log dir'
+  rotation_method 'rotation method'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>CompatLogger</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default compat, icinga <code>CompatLogger</code> Object <code>library</code>
+</li>
+<li>
+<em>log_dir</em> (optional)  - icinga <code>CompatLogger</code> attribute <code>log_dir</code>
+</li>
+<li>
+<em>rotation_method</em> (optional)  - icinga <code>CompatLogger</code> attribute <code>rotation_method</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_checkresultreader" class="anchor" href="#lwrp-icinga2_checkresultreader" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_checkresultreader</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>checkresultreader</code> creates an icinga <code>CheckResultReader</code> object.</p>
+
+<p><strong>LWRP CheckResultReader example</strong></p>
+
+<pre><code>icinga2_checkresultreader 'checkresultreader' do
+  spool_dir 'spool dir'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>CheckResultReader</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default compat, icinga <code>CheckResultReader</code> Object <code>library</code>
+</li>
+<li>
+<em>spool_dir</em> (optional)    - icinga <code>CheckResultReader</code> attribute <code>spool_dir</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_checkercomponent" class="anchor" href="#lwrp-icinga2_checkercomponent" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_checkercomponent</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>checkercomponent</code> creates an icinga <code>CheckerComponent</code> object.</p>
+
+<p><strong>LWRP CheckerComponent example</strong></p>
+
+<pre><code>icinga2_checkercomponent 'checkercomponent'
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>CheckerComponent</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default checker, icinga <code>CheckerComponent</code> Object <code>library</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_notificationcomponent" class="anchor" href="#lwrp-icinga2_notificationcomponent" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_notificationcomponent</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>notificationcomponent</code> creates an icinga <code>NotificationComponent</code> object.</p>
+
+<p><strong>LWRP CheckerComponent example</strong></p>
+
+<pre><code>icinga2_notificationcomponent 'notificationcomponent' do
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>NotificationComponent</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default notification, icinga <code>NotificationComponent</code> Object <code>library</code>
+</li>
+<li>
+<em>enable_ha</em> (optional)    - default checker, icinga <code>NotificationComponent</code> attribute <code>enable_ha</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_filelogger" class="anchor" href="#lwrp-icinga2_filelogger" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_filelogger</h2>
 
-<p>To be added.</p>
+<p>LWRP <code>filelogger</code> creates an icinga <code>FileLogger</code> object.</p>
+
+<p><strong>LWRP CheckerComponent example</strong></p>
+
+<pre><code>icinga2_filelogger 'filelogger' do
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>FileLogger</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>path</em> (optional) - default checker, icinga <code>FileLogger</code> attribute <code>path</code>
+</li>
+<li>
+<em>severity</em> (optional) - icinga <code>FileLogger</code> attribute <code>severity</code>
+</li>
+</ul>
 
 <h2>
 <a id="lwrp-icinga2_perfdatawriter" class="anchor" href="#lwrp-icinga2_perfdatawriter" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_perfdatawriter</h2>
+
+<p>LWRP <code>perfdatawriter</code> creates an icinga <code>PerfdataWriter</code> object.</p>
+
+<p><strong>LWRP PerfdataWriter example</strong></p>
+
+<pre><code>icinga2_perfdatawriter 'perfdatawriter' do
+  host_perfdata_path 'host perfdata path'
+  service_perfdata_path 'service perfdata path'
+  host_format_template 'host perfdata format'     service_format_template 'service perfdata format'
+  rotation_interval 'rotation interval'
+end
+</code></pre>
+
+<p>Above LWRP resource will create an icinga <code>PerfdataWriter</code> object.</p>
+
+<p><strong>LWRP Options</strong></p>
+
+<ul>
+<li>
+<em>action</em> (optional)   - default :enable, options: :enable, :disable</li>
+<li>
+<em>library</em> (optional)  - default perfdata, icinga <code>PerfdataWriter</code> Object <code>library</code>
+</li>
+<li>
+<em>host_perfdata_path</em> (optional)   - default checker, icinga <code>PerfdataWriter</code> attribute  <code>host_perfdata_path</code>
+</li>
+<li>
+<em>service_perfdata_path</em> (optional)    - default checker, icinga <code>PerfdataWriter</code> attribute  <code>service_perfdata_path</code>
+</li>
+<li>
+<em>host_temp_path</em> (optional)   - icinga <code>PerfdataWriter</code> attribute <code>host_temp_path</code>
+</li>
+<li>
+<em>service_temp_path</em> (optional)    - icinga <code>PerfdataWriter</code> attribute <code>service_temp_path</code>
+</li>
+<li>
+<em>host_format_template</em> (optional) - icinga <code>PerfdataWriter</code> attribute <code>host_format_template</code>
+</li>
+<li>
+<em>service_format_template</em> (optional)  - icinga <code>PerfdataWriter</code> attribute <code>service_format_template</code>
+</li>
+<li>
+<em>rotation_interval</em> (optional)    - icinga <code>PerfdataWriter</code> attribute <code>rotation_interval</code>
+</li>
+</ul>
+
+<h2>
+<a id="lwrp-icinga2_applydependency" class="anchor" href="#lwrp-icinga2_applydependency" aria-hidden="true"><span class="octicon octicon-link"></span></a>LWRP icinga2_applydependency</h2>
 
 <p>To be added.</p>
 
@@ -2040,9 +2303,10 @@ end
 <a id="cookbook-icinga2-constants-attributes" class="anchor" href="#cookbook-icinga2-constants-attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookbook Icinga2 Constants Attributes</h2>
 
 <ul>
+<li><p><code>default['icinga2']['server']['constants']['NodeName']</code> (default: <code>node['fqdn']</code>): icinga2 NodeName constant</p></li>
 <li><p><code>default['icinga2']['server']['constants']['PluginDir']</code> (default: <code>node['icinga2']['plugins_dir']</code>): icinga2 plugins directory location</p></li>
 <li><p><code>default['icinga2']['server']['constants']['ManubulonPluginDir']</code> (default: <code>node['icinga2']['plugins_dir']</code>): icinga2 plugins directory location</p></li>
-<li><p><code>default['icinga2']['server']['constants']['TicketSalt']</code> (default: <code>ch2ng3m3</code>): icinga2 default TicketSalt key</p></li>
+<li><p><code>default['icinga2']['server']['constants']['TicketSalt']</code> (default: <code>ed25aed394c4bf7d236b347bb67df466</code>): icinga2 default TicketSalt key</p></li>
 </ul>
 
 <h2>
@@ -2066,7 +2330,6 @@ end
 <li><p><code>default['icinga2']['server']['object']['host']['check_command']</code> (default: <code>hostalive</code>)</p></li>
 <li><p><code>default['icinga2']['server']['object']['host']['zone']</code> (default: <code>nil</code>)</p></li>
 <li><p><code>default['icinga2']['server']['object']['host']['command_endpoint']</code> (default: <code>nil</code>)</p></li>
-<li><p><code>default['icinga2']['server']['object']['host']['zone_attribute']</code> (default: <code>icinga2_zone</code>)</p></li>
 </ul>
 
 <h2>
@@ -2273,11 +2536,16 @@ limitations under the License.
 </pre>
       </section>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/vkhatri">vkhatri</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Chef Icinga2 maintained by <a href="https://github.com/vkhatri">vkhatri</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
     
+
   </body>
 </html>
